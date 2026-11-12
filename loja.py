@@ -1,5 +1,5 @@
 # CODIGO (TF 11).
-# Passo 5: Colecoes de primeira classe - ItensDoPedido e Pedidos
+# Passo 6: Entidades pequenas - Quebra o Cliente em Pessoa e Endereco
 
 
 class Cpf:
@@ -90,15 +90,27 @@ class Status:
         return self.descrever()
 
 
-class Cliente:
-    """Representa os dados completos do cliente."""
-    def __init__(self, nome, cpf, email, rua, cidade, cep, tipo):
+class Pessoa:
+    """Representa os dados pessoais do cliente."""
+    def __init__(self, nome, cpf, email):
         self.nome = nome
         self.cpf = cpf
         self.email = email
+
+
+class Endereco:
+    """Representa a localizacao geografica do cliente."""
+    def __init__(self, rua, cidade, cep):
         self.rua = rua
         self.cidade = cidade
         self.cep = cep
+
+
+class Cliente:
+    """Representa o cliente agregando pessoa, endereco e tipo."""
+    def __init__(self, pessoa, endereco, tipo):
+        self.pessoa = pessoa
+        self.endereco = endereco
         self.tipo = tipo
 
 
@@ -182,7 +194,7 @@ class Pedidos:
 
     def imprimir_relatorio(self):
         for numero, pedido in self.pedidos.items():
-            print("Pedido", numero, "-", pedido.cliente.nome, "-", pedido.cliente.cidade)
+            print("Pedido", numero, "-", pedido.cliente.pessoa.nome, "-", pedido.cliente.endereco.cidade)
             print("  status:", pedido.obter_status().descrever())
             pedido.itens.imprimir()
             if not pedido.itens.esta_vazia():
@@ -234,14 +246,18 @@ livro = Produto("Livro", Dinheiro(89.5))
 fone = Produto("Fone", Dinheiro(60.0))
 
 # Pedido 1
-cliente_ana = Cliente("Ana Souza", Cpf("12345678901"), Email("ana@mail.com"), "Rua das Flores, 10", "Sorocaba", Cep("18010000"), "V")
+pessoa_ana = Pessoa("Ana Souza", Cpf("12345678901"), Email("ana@mail.com"))
+endereco_ana = Endereco("Rua das Flores, 10", "Sorocaba", Cep("18010000"))
+cliente_ana = Cliente(pessoa_ana, endereco_ana, "V")
 pedido_da_ana = pedidos.novo_pedido(1, cliente_ana)
 pedido_da_ana.adicionar_item(caderno, 2)
 pedido_da_ana.adicionar_item(caneta, 5)
 
 # Pedido 2
 try:
-    cliente_bruno = Cliente("Bruno Lima", Cpf("123"), Email("bruno@mail.com"), "Av. Central, 200", "Votorantim", Cep("18110000"), "N")
+    pessoa_bruno = Pessoa("Bruno Lima", Cpf("123"), Email("bruno@mail.com"))
+    endereco_bruno = Endereco("Av. Central, 200", "Votorantim", Cep("18110000"))
+    cliente_bruno = Cliente(pessoa_bruno, endereco_bruno, "N")
     pedidos.novo_pedido(2, cliente_bruno)
 except ValueError as erro:
     print(f"pedido 2 recusado: {erro}")
@@ -252,29 +268,39 @@ pedido_da_ana_2.adicionar_item(livro, 1)
 
 # Pedido 4
 try:
-    cliente_carla = Cliente("Carla Dias", Cpf("98765432100"), Email("carla.mail.com"), "Rua do Sol, 55", "Sorocaba", Cep("18020000"), "F")
+    pessoa_carla = Pessoa("Carla Dias", Cpf("98765432100"), Email("carla.mail.com"))
+    endereco_carla = Endereco("Rua do Sol, 55", "Sorocaba", Cep("18020000"))
+    cliente_carla = Cliente(pessoa_carla, endereco_carla, "F")
     pedidos.novo_pedido(4, cliente_carla)
 except ValueError as erro:
     print(f"pedido 4 recusado: {erro}")
 
 # Pedido 5
-cliente_diego = Cliente("Diego Rocha", Cpf("11122233344"), Email("diego@mail.com"), "Rua Nova, 7", "Itu", Cep("13300000"), "N")
+pessoa_diego = Pessoa("Diego Rocha", Cpf("11122233344"), Email("diego@mail.com"))
+endereco_diego = Endereco("Rua Nova, 7", "Itu", Cep("13300000"))
+cliente_diego = Cliente(pessoa_diego, endereco_diego, "N")
 pedido_do_diego = pedidos.novo_pedido(5, cliente_diego)
 
 # Pedido 6
-cliente_eva = Cliente("Eva Nunes", Cpf("55566677788"), Email("eva@mail.com"), "Alameda Azul, 1", "Itu", Cep("13300001"), "F")
+pessoa_eva = Pessoa("Eva Nunes", Cpf("55566677788"), Email("eva@mail.com"))
+endereco_eva = Endereco("Alameda Azul, 1", "Itu", Cep("13300001"))
+cliente_eva = Cliente(pessoa_eva, endereco_eva, "F")
 pedido_da_eva = pedidos.novo_pedido(6, cliente_eva)
 pedido_da_eva.adicionar_item(fone, 1)
 
 # Pedido 7
 try:
-    cliente_fabio = Cliente("Fabio Costa", Cpf("99988877766"), Email("fabio@mail.com"), "Rua Velha, 3", "Itu", Cep("123"), "N")
+    pessoa_fabio = Pessoa("Fabio Costa", Cpf("99988877766"), Email("fabio@mail.com"))
+    endereco_fabio = Endereco("Rua Velha, 3", "Itu", Cep("123"))
+    cliente_fabio = Cliente(pessoa_fabio, endereco_fabio, "N")
     pedidos.novo_pedido(7, cliente_fabio)
 except ValueError as erro:
     print(f"pedido 7 recusado: {erro}")
 
 # Pedido 8
-cliente_gil = Cliente("Gil Alves", Cpf("44455566677"), Email("gil@mail.com"), "Rua do Meio, 9", "Sorocaba", Cep("18030000"), "N")
+pessoa_gil = Pessoa("Gil Alves", Cpf("44455566677"), Email("gil@mail.com"))
+endereco_gil = Endereco("Rua do Meio, 9", "Sorocaba", Cep("18030000"))
+cliente_gil = Cliente(pessoa_gil, endereco_gil, "N")
 pedido_do_gil = pedidos.novo_pedido(8, cliente_gil)
 pedido_do_gil.adicionar_item(fone, 2)
 
