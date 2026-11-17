@@ -1,5 +1,5 @@
-# CODIGO (TF 11).
-# Passo 8: Sem else e um nivel so
+# TF 11 - Object Calisthenics: Loja Refatorada
+# Aplicacao rigorosa das regras de modularizacao e boas praticas de orientacao a objetos.
 
 
 class Cpf:
